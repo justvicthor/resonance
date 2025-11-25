@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>Resonance</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- JSmol core (hostato da St. Olaf College) -->
+  <script src="https://chemapps.stolaf.edu/jmol/jsmol/JSmol.min.js" defer></script>
+
+  <!-- CSS principale -->
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- JS dell'app -->
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <div class="app-inner">
+      <header>
+        <div class="brand">
+          <div class="brand-logo">
+            <div class="brand-logo-inner">
+              <img src="icons/resonance_128px.png" alt="Resonance logo" />
+            </div>
+          </div>
+          <div>
+            <div class="brand-text-title">Resonance</div>
+            <div class="brand-text-sub">
+              <span data-i18n="brand.tagline">
+                A free 3D molecule visualizer based on JSmol
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="header-controls">
+          <div class="segmented" id="lang-switch">
+            <button type="button" data-lang="it" class="active">IT</button>
+            <button type="button" data-lang="en">EN</button>
+          </div>
+          <button
+            type="button"
+            class="icon-button"
+            id="theme-toggle"
+            aria-label="Toggle theme"
+          >
+            <span class="icon" id="theme-icon">☾</span>
+          </button>
+        </div>
+      </header>
+
+      <main>
+        <!-- Landing / uploader -->
+        <section class="landing" id="landing">
+          <div class="landing-inner" id="landing-card">
+            <div class="hero-label">
+              <span class="hero-label-dot"></span>
+              <span data-i18n="hero.badge">Interactive 3D chemistry</span>
+            </div>
+            <h1 class="hero-title" data-i18n="hero.title">
+              Visualizza le tue molecole in 3D
+            </h1>
+            <p class="hero-subtitle" data-i18n="hero.subtitle">
+              Carica un file PDB o incolla il suo contenuto testuale per
+              esplorare la struttura, la superficie e il potenziale elettrico
+              in tempo reale.
+            </p>
+
+            <div class="uploader-card">
+              <!-- File upload -->
+              <div>
+                <div class="uploader-block-title">
+                  <span data-i18n="upload.fileTitle">Carica un file .pdb</span>
+                  <span class="pill-small">.pdb</span>
+                </div>
+                <label for="pdb-file-input" class="file-drop" id="file-drop-area">
+                  <div class="file-drop-icon">⬆️</div>
+                  <div style="flex: 1 1 auto;">
+                    <div class="file-drop-content-main">
+                      <strong data-i18n="upload.dropTitle">
+                        Trascina qui il file PDB
+                      </strong>
+                      <span data-i18n="upload.dropOr"> o clicca per selezionarlo</span>
+                    </div>
+                    <div class="file-drop-content-sub" data-i18n="upload.dropSubtitle">
+                      Formati supportati: <code>.pdb</code>, <code>.mol</code>, <code>.mol2</code>.
+                    </div>
+                  </div>
+                  <div class="file-drop-badge" id="file-name-badge" data-i18n="upload.badgeEmpty">
+                    Nessun file selezionato
+                  </div>
+                  <input type="file" id="pdb-file-input" accept=".pdb,.mol2,.mol" />
+                </label>
+              </div>
+
+              <!-- PDB text -->
+              <div>
+                <div class="uploader-block-title">
+                  <span data-i18n="upload.textTitle">Oppure incolla il contenuto PDB</span>
+                  <span class="pill-small" data-i18n="upload.textHint">Header compreso</span>
+                </div>
+                <textarea
+                  id="pdb-textarea"
+                  class="pdb-textarea"
+                  spellcheck="false"
+                  data-i18n-placeholder="upload.textPlaceholder"
+                ></textarea>
+                <div class="textarea-hint">
+                  <span data-i18n="upload.textHintBottom">
+                    Puoi incollare l'intero file PDB, non è necessario modificare le righe.
+                  </span>
+                  <span class="kbd">Ctrl / Cmd + Enter</span>
+                </div>
+              </div>
+
+              <!-- Footer -->
+              <div class="uploader-footer">
+                <button type="button" class="primary-btn" id="load-button">
+                  <span class="icon">🚀</span>
+                  <span data-i18n="upload.loadButton">Carica molecola</span>
+                </button>
+                <div class="uploader-footer-legend">
+                  <span class="dot"></span>
+                  <span data-i18n="upload.footerLegend">
+                    JSmol permette rotazione, zoom e interazione diretta con il mouse.
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="error-banner" id="error-banner"></div>
+          </div>
+        </section>
+
+        <!-- Viewer -->
+        <section class="viewer-panel">
+          <div class="viewer-header">
+            <div class="viewer-title-group">
+              <div class="viewer-title" data-i18n="viewer.title">Viewer 3D</div>
+              <div class="viewer-subtitle" id="viewer-subtitle" data-i18n="viewer.subtitleEmpty">
+                In attesa di una molecola PDB…
+              </div>
+            </div>
+            <div class="viewer-chip-row">
+              <div class="viewer-chip" data-i18n="viewer.chip1">Mouse: drag = ruota</div>
+              <div class="viewer-chip" data-i18n="viewer.chip2">Scroll = zoom</div>
+            </div>
+          </div>
+          <div class="viewer-body">
+            <div class="viewer-canvas-wrapper">
+              <div class="viewer-canvas" id="viewer-canvas">
+                <div id="jsmol-container"></div>
+                <div class="viewer-placeholder" id="viewer-placeholder">
+                  <div class="viewer-placeholder-icon">🧬</div>
+                  <p data-i18n="viewer.placeholder">
+                    Carica un file PDB o incolla il suo contenuto per iniziare a esplorare la molecola in 3D.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="viewer-controls">
+              <div class="control-group">
+                <button type="button" class="toggle-btn" id="spin-toggle">
+                  <span class="status-dot"></span>
+                  <span data-i18n="controls.spinOff">Spin off</span>
+                </button>
+                <button type="button" class="toggle-btn" id="surface-toggle">
+                  <span class="status-dot"></span>
+                  <span data-i18n="controls.surfaceOff">Surface off</span>
+                </button>
+                <button type="button" class="toggle-btn" id="epm-toggle">
+                  <span class="status-dot"></span>
+                  <span data-i18n="controls.epmOff">EPM off</span>
+                </button>
+              </div>
+              <div class="viewer-legend">
+                <span data-i18n="viewer.legendLabel">EPM:</span>
+                <div class="epm-swatches">
+                  <div class="epm-swatch red"></div>
+                  <div class="epm-swatch green"></div>
+                  <div class="epm-swatch blue"></div>
+                </div>
+                <span data-i18n="viewer.legendText">
+                  rosso = più elettronegativo, verde ≈ neutro, blu = meno elettronegativo
+                </span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+</body>
+</html>
