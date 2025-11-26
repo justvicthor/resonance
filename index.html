@@ -56,15 +56,11 @@
         <!-- Landing / uploader (left column, spans full height) -->
         <section class="landing" id="landing">
           <div class="landing-inner" id="landing-card">
-            <div class="hero-label">
-              <span class="hero-label-dot"></span>
-              <span data-i18n="hero.badge">Interactive 3D chemistry</span>
-            </div>
             <h1 class="hero-title" data-i18n="hero.title">
               Visualizza le tue molecole in 3D
             </h1>
             <p class="hero-subtitle" data-i18n="hero.subtitle">
-              Carica un file PDB o incolla il suo contenuto testuale per
+              Carica un file o incolla il suo contenuto testuale per
               esplorare la struttura, la superficie e il potenziale elettrico
               in tempo reale.
             </p>
@@ -73,15 +69,18 @@
               <!-- File upload -->
               <div>
                 <div class="uploader-block-title">
-                  <span data-i18n="upload.fileTitle">Carica un file .pdb</span>
-                  <span class="pill-small">.pdb</span>
+                  <span data-i18n="upload.fileTitle">Carica un file</span>
+                  <div class="pill-row">
+                    <span class="pill-small">.mol2</span>
+                    <span class="pill-small">.pdb</span>
+                  </div>
                 </div>
                 <label for="pdb-file-input" class="file-drop" id="file-drop-area">
                   <div class="file-drop-icon">⬆️</div>
                   <div style="flex: 1 1 auto;">
                     <div class="file-drop-content-main">
                       <strong data-i18n="upload.dropTitle">
-                        Trascina qui il file PDB
+                        Trascina qui il file
                       </strong>
                       <span data-i18n="upload.dropOr"> o clicca per selezionarlo</span>
                     </div>
@@ -99,8 +98,7 @@
               <!-- PDB text -->
               <div>
                 <div class="uploader-block-title">
-                  <span data-i18n="upload.textTitle">Oppure incolla il contenuto PDB</span>
-                  <span class="pill-small" data-i18n="upload.textHint">Header compreso</span>
+                  <span data-i18n="upload.textTitle">Oppure incolla il contenuto del file</span>
                 </div>
                 <textarea
                   id="pdb-textarea"
@@ -110,7 +108,7 @@
                 ></textarea>
                 <div class="textarea-hint">
                   <span data-i18n="upload.textHintBottom">
-                    Puoi incollare l'intero file PDB, non è necessario modificare le righe.
+                    Puoi incollare l'intero file, non è necessario modificare le righe.
                   </span>
                   <span class="kbd">Ctrl / Cmd + Enter</span>
                 </div>
@@ -122,12 +120,6 @@
                   <span class="icon">🚀</span>
                   <span data-i18n="upload.loadButton">Carica molecola</span>
                 </button>
-                <div class="uploader-footer-legend">
-                  <span class="dot"></span>
-                  <span data-i18n="upload.footerLegend">
-                    JSmol permette rotazione, zoom e interazione diretta con il mouse.
-                  </span>
-                </div>
               </div>
             </div>
 
@@ -141,7 +133,7 @@
             <div class="viewer-title-group">
               <div class="viewer-title" data-i18n="viewer.title">Viewer 3D</div>
               <div class="viewer-subtitle" id="viewer-subtitle" data-i18n="viewer.subtitleEmpty">
-                In attesa di una molecola PDB…
+                In attesa di una molecola...
               </div>
             </div>
             <div class="viewer-chip-row">
@@ -156,7 +148,7 @@
                 <div class="viewer-placeholder" id="viewer-placeholder">
                   <div class="viewer-placeholder-icon">🧬</div>
                   <p data-i18n="viewer.placeholder">
-                    Carica un file PDB o incolla il suo contenuto per iniziare a esplorare la molecola in 3D.
+                    Carica un file o incolla il suo contenuto per iniziare a esplorare la molecola in 3D.
                   </p>
                 </div>
               </div>

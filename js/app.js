@@ -7,41 +7,41 @@ const translations = {
     "hero.badge": "Interactive 3D chemistry",
     "hero.title": "Visualizza le tue molecole in 3D",
     "hero.subtitle":
-      "Carica un file PDB o incolla il suo contenuto testuale per esplorare struttura, superficie e potenziale elettrostatico in tempo reale.",
+      "Carica un file o incolla il suo contenuto testuale per esplorarne struttura, superficie e potenziale elettrostatico in tempo reale.",
     "hero.tag1": "Upload o incolla PDB",
     "hero.tag2": "Spin, superfici, zoom",
     "hero.tag3": "Mappa di potenziale (EPM)",
     "hero.tag4": "Light & dark mode",
-    "upload.fileTitle": "Carica un file .pdb",
-    "upload.dropTitle": "Trascina qui il file PDB",
+    "upload.fileTitle": "Carica un file",
+    "upload.dropTitle": "Trascina qui il file",
     "upload.dropOr": " o clicca per selezionarlo",
     "upload.dropSubtitle":
       "Formati supportati: .pdb, .mol, .mol2.",
     "upload.badgeEmpty": "Nessun file selezionato",
     "upload.badgeSelected": "File selezionato:",
-    "upload.textTitle": "Oppure incolla il contenuto PDB",
+    "upload.textTitle": "Oppure incolla il contenuto del file",
     "upload.textHint": "Funziona anche con PDB multi-modello",
     "upload.textPlaceholder":
-      "Incolla qui l'intero contenuto del file .pdb…",
+      "Incolla qui l'intero contenuto del file...",
     "upload.textHintBottom":
       "Premi Ctrl / Cmd + Invio per caricare direttamente il testo.",
     "upload.loadButton": "Carica molecola",
     "upload.footerLegend":
       "JSmol supporta rotazione, zoom e menu contestuale (click destro).",
     "errors.noFile":
-      "Seleziona un file .pdb oppure incolla il contenuto PDB prima di continuare.",
+      "Seleziona un file oppure incollane il contenuto prima di continuare.",
     "errors.wrongExtension":
       "Formato non valido: sono supportati solo .pdb, .mol e .mol2.",
-    "errors.emptyText": "L'area di testo PDB è vuota.",
+    "errors.emptyText": "L'area di testo del file è vuota.",
     "errors.jmolNotReady":
       "Il viewer JSmol non è ancora pronto. Riprova tra un istante.",
     "errors.noEpmGeneric":
       "Non è stato possibile calcolare un potenziale elettrostatico significativo per questa molecola.",
     "viewer.title": "Viewer 3D",
-    "viewer.subtitleEmpty": "In attesa di una molecola PDB…",
+    "viewer.subtitleEmpty": "In attesa di una molecola…",
     "viewer.subtitleLoaded": "Molecola caricata da sorgente locale",
     "viewer.placeholder":
-      "Carica un file .pdb oppure incolla il testo PDB per iniziare a esplorare la molecola in 3D.",
+      "Carica un file oppure incollane il testo per iniziare a esplorare la molecola in 3D.",
     "viewer.chip1": "Mouse: trascina per ruotare",
     "viewer.chip2": "Scroll: zoom in / out",
     "viewer.legendLabel": "Scala EPM",
@@ -60,12 +60,12 @@ const translations = {
       "Fai domande sulla molecola caricata: legami, geometria, proprietà, farmacologia…",
     "ai.contextOn": "Usa il file caricato come contesto",
     "ai.placeholder":
-      "Fai una domanda su questa molecola (legami, cariche, interazioni, farmacologia, ecc.)…",
+      "Fai una domanda su questa molecola",
     "ai.send": "Invia",
     "ai.welcome":
       "Carica una molecola e chiedimi qualsiasi cosa su legami, geometria, proprietà fisico-chimiche o farmacologia.",
     "ai.disclaimer":
-      "Le risposte sono solo a scopo informativo e non sostituiscono il parere di un medico o le norme di sicurezza di laboratorio.",
+      "Le risposte sono a puro scopo informativo e non sostituiscono il parere di un esperto o le norme di sicurezza di laboratorio.",
     "ai.error":
       "C'è stato un errore nel contattare Resonance AI. Controlla la connessione o la chiave API e riprova.",
     "ai.thinking": "Sto pensando…"
@@ -77,41 +77,41 @@ const translations = {
     "hero.badge": "Interactive 3D chemistry",
     "hero.title": "Explore your molecules in 3D",
     "hero.subtitle":
-      "Upload a PDB file or paste its text to explore structure, surfaces and electrostatic potential in real time.",
-    "hero.tag1": "PDB upload & paste",
+      "Upload a file or paste its text to explore structure, surfaces and electrostatic potential in real time.",
+    "hero.tag1": "File upload & paste",
     "hero.tag2": "Spin, surfaces & zoom",
     "hero.tag3": "Electrostatic potential (EPM)",
     "hero.tag4": "Light & dark mode",
-    "upload.fileTitle": "Upload a .pdb file",
-    "upload.dropTitle": "Drop your PDB file here",
+    "upload.fileTitle": "Upload a file",
+    "upload.dropTitle": "Drop your file here",
     "upload.dropOr": " or click to browse",
     "upload.dropSubtitle":
       "Supported formats: .pdb, .mol, .mol2.",
     "upload.badgeEmpty": "No file selected",
     "upload.badgeSelected": "Selected file:",
-    "upload.textTitle": "Or paste the PDB contents",
+    "upload.textTitle": "Or paste the file contents",
     "upload.textHint": "Works with multi-model PDBs as well",
     "upload.textPlaceholder":
-      "Paste the full contents of your .pdb file here…",
+      "Paste the full contents of your file here…",
     "upload.textHintBottom":
       "Press Ctrl / Cmd + Enter to load the pasted text.",
     "upload.loadButton": "Load molecule",
     "upload.footerLegend":
       "JSmol supports rotation, zooming and a rich context menu (right-click).",
     "errors.noFile":
-      "Please select a .pdb file or paste PDB text before continuing.",
+      "Please select a file or paste its text content before continuing.",
     "errors.wrongExtension":
       "Invalid format: only .pdb, .mol and .mol2 files are supported.",
-    "errors.emptyText": "The PDB text area is empty.",
+    "errors.emptyText": "The file text area is empty.",
     "errors.jmolNotReady":
       "The JSmol viewer is not ready yet. Please try again in a moment.",
     "errors.noEpmGeneric":
       "Could not compute a meaningful electrostatic potential for this molecule.",
     "viewer.title": "3D Viewer",
-    "viewer.subtitleEmpty": "Waiting for a PDB molecule…",
+    "viewer.subtitleEmpty": "Waiting for a molecule…",
     "viewer.subtitleLoaded": "Molecule loaded from local source",
     "viewer.placeholder":
-      "Upload a .pdb file or paste PDB text to start exploring the molecule in 3D.",
+      "Upload a file or paste its text content to start exploring the molecule in 3D.",
     "viewer.chip1": "Mouse: drag to rotate",
     "viewer.chip2": "Scroll: zoom in / out",
     "viewer.legendLabel": "EPM scale",
@@ -130,12 +130,12 @@ const translations = {
       "Ask questions about the loaded molecule: bonds, geometry, properties, pharmacology…",
     "ai.contextOn": "Uses the loaded file as context",
     "ai.placeholder":
-      "Ask a question about this molecule (bonds, charges, interactions, pharmacology, etc.)…",
+      "Ask a question about this molecule",
     "ai.send": "Send",
     "ai.welcome":
       "Load a molecule and ask me anything about bonds, geometry, physico-chemical properties or pharmacology.",
     "ai.disclaimer":
-      "Answers are for informational purposes only and do not replace medical advice or lab safety guidelines.",
+      "Answers are for informational purposes only and do not replace experts advice or lab safety guidelines.",
     "ai.error":
       "There was an error contacting Resonance AI. Please check your connection or the API key and try again.",
     "ai.thinking": "Thinking…"
