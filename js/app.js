@@ -52,7 +52,23 @@ const translations = {
     "controls.surfaceOn": "Surface on",
     "controls.surfaceOff": "Surface off",
     "controls.epmOn": "EPM on",
-    "controls.epmOff": "EPM off"
+    "controls.epmOff": "EPM off",
+
+    // --- AI translations (IT) ---
+    "ai.title": "Ask Resonance AI",
+    "ai.subtitle":
+      "Fai domande sulla molecola caricata: legami, geometria, proprietà, farmacologia…",
+    "ai.contextOn": "Usa il file caricato come contesto",
+    "ai.placeholder":
+      "Fai una domanda su questa molecola (legami, cariche, interazioni, farmacologia, ecc.)…",
+    "ai.send": "Invia",
+    "ai.welcome":
+      "Carica una molecola e chiedimi qualsiasi cosa su legami, geometria, proprietà fisico-chimiche o farmacologia.",
+    "ai.disclaimer":
+      "Le risposte sono solo a scopo informativo e non sostituiscono il parere di un medico o le norme di sicurezza di laboratorio.",
+    "ai.error":
+      "C'è stato un errore nel contattare Resonance AI. Controlla la connessione o la chiave API e riprova.",
+    "ai.thinking": "Sto pensando…"
   },
   en: {
     "brand.tagline": "A free 3D molecule visualizer based on JSmol",
@@ -106,11 +122,105 @@ const translations = {
     "controls.surfaceOn": "Surface on",
     "controls.surfaceOff": "Surface off",
     "controls.epmOn": "EPM on",
-    "controls.epmOff": "EPM off"
+    "controls.epmOff": "EPM off",
+
+    // --- AI translations (EN) ---
+    "ai.title": "Ask Resonance AI",
+    "ai.subtitle":
+      "Ask questions about the loaded molecule: bonds, geometry, properties, pharmacology…",
+    "ai.contextOn": "Uses the loaded file as context",
+    "ai.placeholder":
+      "Ask a question about this molecule (bonds, charges, interactions, pharmacology, etc.)…",
+    "ai.send": "Send",
+    "ai.welcome":
+      "Load a molecule and ask me anything about bonds, geometry, physico-chemical properties or pharmacology.",
+    "ai.disclaimer":
+      "Answers are for informational purposes only and do not replace medical advice or lab safety guidelines.",
+    "ai.error":
+      "There was an error contacting Resonance AI. Please check your connection or the API key and try again.",
+    "ai.thinking": "Thinking…"
   }
 };
 
 let currentLang = "it";
+
+// ------- Gemini / Resonance AI config -------
+const MODEL = "gemini-2.5-flash-lite";
+const API_BASE = "https://generativelanguage.googleapis.com/v1beta";
+const API_KEY = "AIzaSyAoLnf8v6LiP4LwJUCZvIUd5fkHrP3_O58";
+
+const SYSTEM_PROMPT = `
+You are an AI assistant integrated into a 3D molecular visualization application.
+Your role is to act as a top-level expert in:
+- general, organic, inorganic, and physical chemistry
+- computational chemistry and molecular modeling
+- biochemistry and molecular biology
+- pharmacology, pharmacokinetics, and pharmacodynamics
+- drug design and medicinal chemistry
+- structural biology: bonding, non-covalent interactions, protein/DNA structure, molecular dynamics
+
+Your goal is to help the user understand what is “behind” the 3D structures they are viewing, including:
+- the meaning of bonds, geometries, charges
+- non-covalent interactions (hydrogen bonds, van der Waals, π–π stacking, electrostatics, hydrophobic effects, etc.)
+- physico-chemical properties (pKa, logP, polarity, solubility, dipole moments, etc.)
+- structure–activity relationships (SAR), mechanisms of action, biological targets, pharmacological effects
+- connections to biology, physiology, and pathology when relevant
+
+Input context from the app
+
+The application lets the user upload or paste molecular structure files, including:
+- .pdb files (e.g. proteins, nucleic acids, complexes)
+- .mol and .mol2 files (small molecules, ligands, fragments, etc.)
+- or the full text content of these files
+
+You may receive:
+- raw file text (PDB/MOL/MOL2 content)
+- parsed information such as: atoms, bonds, residues, chains, coordinates, charges, connectivity, etc.
+- optional metadata (molecule name, SMILES, formula, biological role, target, etc.)
+
+Always use these data coherently and never invent structural details that cannot be inferred from the provided input.
+
+Behaviour Rules
+1. Expert role
+- Answer as a very knowledgeable researcher/lecturer, but pedagogical and clear.
+- Maintain scientific rigor while keeping explanations understandable.
+
+2. Adapt the level of detail
+- If the question is simple or basic, answer briefly and intuitively.
+- If the question is advanced, you may use formalism, equations, and technical terms, explaining them when helpful.
+- When useful, provide two layers of explanation: an intuitive/short one first, then a more detailed/technical one.
+
+3. Always connect to the molecule/structure
+- When the app provides a structure (PDB/MOL/MOL2 text or parsed data), use it to give specific, structure-based explanations.
+- Explain how properties arise from:
+  - bonding patterns, hybridization, geometry
+  - functional groups and substituents
+  - residue–residue or ligand–receptor interactions
+  - non-covalent interactions visible or implied in the structure
+
+4. Clarity and structure
+- Organize answers with short paragraphs and bullet points where appropriate.
+- Avoid unnecessary jargon; when you use technical terms, briefly explain them.
+- For complex topics, end with a 2–3 sentence summary of the key idea.
+
+5. Honesty and limits
+- If you lack specific information (e.g. exact experimental values, precise pKa, IC50, rate constants), say so explicitly.
+- Clearly distinguish between well-established facts, theoretical models, estimates, and hypotheses.
+
+6. Safety and responsibility
+- Do not provide step-by-step instructions for synthesizing dangerous, explosive, highly toxic, or illegal substances.
+- Do not provide full experimental protocols for risky laboratory procedures.
+- You may explain theoretical concepts and underlying chemistry/biology, but you must not guide the user in practical, hazardous experimentation.
+- Do not provide personalized medical advice. You may explain mechanisms of action and general pharmacology, but refer users to a medical professional for clinical decisions.
+
+7. Language
+- Always reply in the same language used by the user (Italian, English, etc.), unless they clearly switch language.
+
+8. Style
+- Use a professional but friendly tone.
+- Avoid being overly verbose unless the user explicitly asks for a very detailed explanation.
+- Use concrete examples tied to the actual structure or file the user is working with whenever possible.
+`;
 
 function applyTranslations() {
   const dict = translations[currentLang];
@@ -186,6 +296,7 @@ let spinOn = false;
 let surfaceOn = false;
 let epmOn = false;
 let lastFileName = "";
+let lastStructureText = ""; // testo del file caricato, usato come contesto per l'AI
 
 // (non usato ma tienilo se vuoi riutilizzarlo)
 const BALL_AND_STICK_SCRIPT = [
@@ -235,6 +346,15 @@ function initJmol() {
 }
 
 // ------- UI helpers -------
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 function showError(key) {
   const banner = document.getElementById("error-banner");
   if (!banner) return;
@@ -317,6 +437,7 @@ function loadPdbFromText(rawText, sourceLabel, formatHint) {
   clearError();
 
   const sanitized = sanitizeForDataBlock(rawText);
+  lastStructureText = sanitized; // aggiorna contesto per Resonance AI
 
   const isMol = formatHint === "mol";
   const isPdb = formatHint === "pdb";
@@ -477,6 +598,185 @@ function toggleEpm() {
   updateViewerSubtitle();
 }
 
+// ------- Resonance AI: helpers -------
+function setAiLoading(isLoading) {
+  const btn = document.getElementById("ai-send-btn");
+  const input = document.getElementById("ai-input");
+  if (btn) btn.disabled = isLoading;
+  if (input) input.disabled = isLoading;
+  if (btn) {
+    btn.classList.toggle("loading", isLoading);
+  }
+}
+
+function appendAiMessage(role, text, options = {}) {
+  const { markdown = false } = options;
+  const container = document.getElementById("ai-messages");
+  if (!container || !text) return;
+
+  const wrapper = document.createElement("div");
+  wrapper.className =
+    "ai-message " + (role === "user" ? "ai-message-user" : "ai-message-model");
+
+  const bubble = document.createElement("div");
+  bubble.className = "ai-message-bubble";
+
+  if (markdown && window.marked) {
+    // Risposta del modello → renderizza markdown
+    bubble.innerHTML = marked.parse(text);
+  } else {
+    // Messaggi utente o fallback → plain text
+    bubble.textContent = text;
+  }
+
+  wrapper.appendChild(bubble);
+  container.appendChild(wrapper);
+  container.scrollTop = container.scrollHeight;
+
+  return bubble;
+}
+
+async function sendAiMessage(rawText) {
+  const text = (rawText || "").trim();
+  if (!text) return;
+
+  const dict = translations[currentLang];
+
+  const input = document.getElementById("ai-input");
+  if (input) input.value = "";
+
+  // mostra il messaggio dell'utente
+  appendAiMessage("user", text);
+
+  // bubble temporanea "sto pensando..."
+  const thinkingText = dict["ai.thinking"] || "Thinking…";
+  const thinkingBubble = appendAiMessage("model", thinkingText);
+
+  setAiLoading(true);
+
+  const MAX_CONTEXT_CHARS = 15000;
+  let structureSnippet = "";
+  let contextIntro = "";
+
+  if (lastStructureText && lastStructureText.trim()) {
+    structureSnippet =
+      lastStructureText.length > MAX_CONTEXT_CHARS
+        ? lastStructureText.slice(0, MAX_CONTEXT_CHARS) +
+          "\n\n[Context truncated for length]"
+        : lastStructureText;
+
+    contextIntro =
+      currentLang === "it"
+        ? "Di seguito trovi il testo della struttura molecolare caricata dall'app (PDB/MOL/MOL2). Usalo come contesto, senza inventare dettagli che non sono presenti nei dati:\n\n"
+        : "Below is the molecular structure text loaded in the app (PDB/MOL/MOL2). Use it as context and do not invent structural details that are not supported by the data:\n\n";
+  } else {
+    contextIntro =
+      currentLang === "it"
+        ? "Al momento l'app non ti ha fornito nessun file o testo strutturale. Rispondi solo in base alla domanda e alla tua conoscenza generale.\n\n"
+        : "Right now the app has not provided any structure file or text. Answer using only the question and your general knowledge.\n\n";
+  }
+
+  const langHint =
+    currentLang === "it"
+      ? "The user is interacting in Italian. Always answer in Italian unless the user clearly switches language."
+      : "The user is interacting in English. Always answer in English unless the user clearly switches language.";
+
+  const userPrompt =
+    langHint +
+    "\n\nUser question:\n" +
+    text +
+    "\n\n" +
+    contextIntro +
+    structureSnippet;
+
+  try {
+    const body = {
+      systemInstruction: {
+        role: "system",
+        parts: [{ text: SYSTEM_PROMPT }]
+      },
+      contents: [
+        {
+          role: "user",
+          parts: [{ text: userPrompt }]
+        }
+      ],
+      generationConfig: {
+        temperature: 0.5,
+        top_p: 0.9,
+        top_k: 40,
+        maxOutputTokens: 1024
+      }
+    };
+
+    const response = await fetch(
+      `${API_BASE}/models/${MODEL}:generateContent`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-goog-api-key": API_KEY
+        },
+        body: JSON.stringify(body)
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error("Gemini API error:", response.status, data);
+      const msg =
+        (data && data.error && data.error.message) ||
+        (data && data.promptFeedback && data.promptFeedback.blockReason) ||
+        `HTTP ${response.status}`;
+      throw new Error(msg);
+    }
+
+    let aiText = "";
+    if (
+      data.candidates &&
+      data.candidates[0] &&
+      data.candidates[0].content &&
+      Array.isArray(data.candidates[0].content.parts)
+    ) {
+      aiText = data.candidates[0].content.parts
+        .map((p) => p.text || "")
+        .join("\n")
+        .trim();
+    }
+
+    if (!aiText) {
+      aiText =
+        currentLang === "it"
+          ? "Non sono riuscito a generare una risposta. Riprova tra qualche istante."
+          : "I couldn’t generate a response. Please try again in a moment.";
+    }
+
+    if (thinkingBubble) {
+      if (window.marked) {
+        thinkingBubble.innerHTML = marked.parse(aiText);
+      } else {
+        thinkingBubble.textContent = aiText;
+      }
+    }
+  } catch (err) {
+    console.error("Resonance AI error:", err);
+    if (thinkingBubble) {
+      thinkingBubble.textContent =
+        dict["ai.error"] ||
+        (currentLang === "it"
+          ? "C'è stato un errore nel contattare Resonance AI."
+          : "There was an error contacting Resonance AI.");
+    }
+  } finally {
+    setAiLoading(false);
+    const container = document.getElementById("ai-messages");
+    if (container) {
+      container.scrollTop = container.scrollHeight;
+    }
+  }
+}
+
 // ------- wiring events -------
 document.addEventListener("DOMContentLoaded", () => {
   // Theme + i18n
@@ -526,6 +826,7 @@ document.addEventListener("DOMContentLoaded", () => {
       lastFileName = "";
       // testo incollato: assumiamo PDB
       loadPdbFromText(text, "", "pdb");
+      updateFileBadge();
     } else if (fileInput.files[0]) {
       handleFileSelected(fileInput.files[0]);
     } else {
@@ -544,6 +845,7 @@ document.addEventListener("DOMContentLoaded", () => {
       lastFileName = "";
       // anche qui assumiamo PDB per il testo incollato
       loadPdbFromText(text, "", "pdb");
+      updateFileBadge();
     }
   });
 
@@ -557,4 +859,22 @@ document.addEventListener("DOMContentLoaded", () => {
   document
     .getElementById("epm-toggle")
     .addEventListener("click", toggleEpm);
+
+  // Resonance AI form
+  const aiForm = document.getElementById("ai-form");
+  const aiInput = document.getElementById("ai-input");
+
+  if (aiForm && aiInput) {
+    aiForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      sendAiMessage(aiInput.value);
+    });
+
+    aiInput.addEventListener("keydown", (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
+        e.preventDefault();
+        sendAiMessage(aiInput.value);
+      }
+    });
+  }
 });

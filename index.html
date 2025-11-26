@@ -11,6 +11,9 @@
   <!-- CSS principale -->
   <link rel="stylesheet" href="css/styles.css" />
 
+  <!-- Markdown renderer (per formattare le risposte AI) -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
+
   <!-- JS dell'app -->
   <script src="js/app.js" defer></script>
 </head>
@@ -50,7 +53,7 @@
       </header>
 
       <main>
-        <!-- Landing / uploader -->
+        <!-- Landing / uploader (left column, spans full height) -->
         <section class="landing" id="landing">
           <div class="landing-inner" id="landing-card">
             <div class="hero-label">
@@ -132,7 +135,7 @@
           </div>
         </section>
 
-        <!-- Viewer -->
+        <!-- Viewer (right column, top) -->
         <section class="viewer-panel">
           <div class="viewer-header">
             <div class="viewer-title-group">
@@ -185,6 +188,59 @@
                   rosso = più elettronegativo, verde ≈ neutro, blu = meno elettronegativo
                 </span>
               </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Ask Resonance AI (right column, bottom) -->
+        <section class="ai-panel" id="ai-panel">
+          <div class="ai-header">
+            <div class="ai-header-main">
+              <div class="ai-logo">
+                <img src="icons/ai_64px.png" alt="Resonance AI logo" />
+              </div>
+              <div>
+                <div class="ai-title" data-i18n="ai.title">Ask Resonance AI</div>
+                <div class="ai-subtitle" data-i18n="ai.subtitle">
+                  Fai domande sulla molecola caricata: legami, geometria, proprietà, farmacologia…
+                </div>
+              </div>
+            </div>
+            <div class="ai-context-pill">
+              <span class="dot"></span>
+              <span data-i18n="ai.contextOn">Usa il file caricato come contesto</span>
+            </div>
+          </div>
+
+          <div class="ai-body">
+            <div class="ai-messages" id="ai-messages">
+              <div class="ai-message ai-message-model">
+                <div class="ai-message-bubble" data-i18n="ai.welcome">
+                  Carica una molecola e chiedimi qualsiasi cosa su legami, geometria,
+                  proprietà fisico-chimiche o farmacologia.
+                </div>
+              </div>
+            </div>
+
+            <form class="ai-input-row" id="ai-form">
+              <textarea
+                id="ai-input"
+                class="ai-input"
+                rows="2"
+                spellcheck="true"
+                data-i18n-placeholder="ai.placeholder"
+              ></textarea>
+              <button type="submit" class="ai-send-btn" id="ai-send-btn">
+                <span class="icon">➤</span>
+                <span data-i18n="ai.send">Invia</span>
+              </button>
+            </form>
+
+            <div class="ai-footnote" id="ai-footnote">
+              <span data-i18n="ai.disclaimer">
+                Le risposte sono solo a scopo informativo e non sostituiscono il parere di un medico
+                o le norme di sicurezza di laboratorio.
+              </span>
             </div>
           </div>
         </section>
