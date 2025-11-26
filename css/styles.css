@@ -384,6 +384,13 @@ body[data-theme="light"] .file-drop {
   flex-shrink: 0;
 }
 
+.file-drop-text {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 .file-drop-content-main {
   font-size: 13px;
 }
@@ -398,14 +405,24 @@ body[data-theme="light"] .file-drop {
   margin-top: 2px;
 }
 
+/* unica definizione da tenere per .file-drop-badge */
 .file-drop-badge {
-  padding: 3px 8px;
-  font-size: 10px;
-  border-radius: var(--radius-pill);
+  margin-top: 6px;
+  display: inline-block;
+  max-width: 100%;
+
+  padding: 4px 12px;       /* spazio sopra/sotto + ai lati */
+  font-size: 10.5px;
+  line-height: 1.35;       /* riga un po' “più alta” */
+
+  border-radius: 16px;     /* pill morbida ma non esagerata */
   background: rgba(15, 23, 42, 0.92);
   color: var(--accent-muted);
   border: 1px solid rgba(52, 211, 153, 0.6);
-  white-space: nowrap;
+
+  white-space: normal;     /* può andare a capo */
+  word-break: normal;  /* se il nome è lunghissimo si spezza bene */
+  overflow-wrap: break-word;
 }
 
 body[data-theme="light"] .file-drop-badge {
