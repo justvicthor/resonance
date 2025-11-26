@@ -308,6 +308,7 @@ body[data-theme="light"] .hero-label {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  min-height: 480px;
 }
 
 .uploader-card > div:nth-child(2) {
@@ -473,7 +474,7 @@ body[data-theme="light"] .kbd {
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
-  margin-top: auto;
+  margin-top: 14px;
 }
 
 .primary-btn {

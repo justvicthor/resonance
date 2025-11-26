@@ -24,7 +24,7 @@ const translations = {
     "upload.textPlaceholder":
       "Incolla qui l'intero contenuto del file...",
     "upload.textHintBottom":
-      "Premi Ctrl / Cmd + Invio per caricare direttamente il testo.",
+      "Premi Ctrl / Cmd + Invio per caricare il testo.",
     "upload.loadButton": "Carica molecola",
     "upload.footerLegend":
       "JSmol supporta rotazione, zoom e menu contestuale (click destro).",
@@ -55,12 +55,12 @@ const translations = {
     "controls.epmOff": "EPM off",
 
     // --- AI translations (IT) ---
-    "ai.title": "Ask Resonance AI",
+    "ai.title": "Resonance AI",
     "ai.subtitle":
       "Fai domande sulla molecola caricata: legami, geometria, proprietà, farmacologia…",
     "ai.contextOn": "Usa il file caricato come contesto",
     "ai.placeholder":
-      "Fai una domanda su questa molecola",
+      "Fai una domanda a Resonance AI",
     "ai.send": "Invia",
     "ai.welcome":
       "Carica una molecola e chiedimi qualsiasi cosa su legami, geometria, proprietà fisico-chimiche o farmacologia.",
@@ -125,12 +125,12 @@ const translations = {
     "controls.epmOff": "EPM off",
 
     // --- AI translations (EN) ---
-    "ai.title": "Ask Resonance AI",
+    "ai.title": "Resonance AI",
     "ai.subtitle":
       "Ask questions about the loaded molecule: bonds, geometry, properties, pharmacology…",
     "ai.contextOn": "Uses the loaded file as context",
     "ai.placeholder":
-      "Ask a question about this molecule",
+      "Ask a question to Resonance AI",
     "ai.send": "Send",
     "ai.welcome":
       "Load a molecule and ask me anything about bonds, geometry, physico-chemical properties or pharmacology.",
