@@ -53,6 +53,8 @@ const translations = {
     "controls.surfaceOff": "Surface off",
     "controls.epmOn": "EPM on",
     "controls.epmOff": "EPM off",
+    "controls.vdwOn": "vdW on",
+    "controls.vdwOff": "vdW off",
 
     // --- AI translations (IT) ---
     "ai.title": "Resonance AI",
@@ -123,6 +125,8 @@ const translations = {
     "controls.surfaceOff": "Surface off",
     "controls.epmOn": "EPM on",
     "controls.epmOff": "EPM off",
+    "controls.vdwOn": "vdW on",
+    "controls.vdwOff": "vdW off",
 
     // --- AI translations (EN) ---
     "ai.title": "Resonance AI",
@@ -296,7 +300,8 @@ let spinOn = false;
 let surfaceOn = false;
 let epmOn = false;
 let lastFileName = "";
-let lastStructureText = ""; // testo del file caricato, usato come contesto per l'AI
+let lastStructureText = ""; 
+let vdwOn = false;
 
 // (non usato ma tienilo se vuoi riutilizzarlo)
 const BALL_AND_STICK_SCRIPT = [
@@ -387,7 +392,7 @@ function updateViewerSubtitle() {
   if (!el) return;
   const dict = translations[currentLang];
   const key =
-    lastFileName || epmOn || surfaceOn || spinOn
+    lastFileName || epmOn || surfaceOn || spinOn || vdwOn
       ? "viewer.subtitleLoaded"
       : "viewer.subtitleEmpty";
   el.textContent = dict[key];
@@ -398,6 +403,7 @@ function updateControlLabels() {
   const spinLabel = document.querySelector("#spin-toggle [data-i18n]");
   const surfLabel = document.querySelector("#surface-toggle [data-i18n]");
   const epmLabel = document.querySelector("#epm-toggle [data-i18n]");
+  const vdwLabel = document.querySelector("#vdw-toggle [data-i18n]");
   if (spinLabel) {
     spinLabel.textContent = dict[spinOn ? "controls.spinOn" : "controls.spinOff"];
   }
@@ -406,6 +412,9 @@ function updateControlLabels() {
   }
   if (epmLabel) {
     epmLabel.textContent = dict[epmOn ? "controls.epmOn" : "controls.epmOff"];
+  }
+  if (vdwLabel) {
+    vdwLabel.textContent = dict[vdwOn ? "controls.vdwOn" : "controls.vdwOff"];
   }
 }
 
@@ -470,6 +479,7 @@ function loadPdbFromText(rawText, sourceLabel, formatHint) {
   spinOn = false;
   surfaceOn = false;
   epmOn = false;
+  vdwOn = false;
   document
     .querySelectorAll(".toggle-btn")
     .forEach((btn) => btn.classList.remove("active"));
@@ -591,6 +601,36 @@ function toggleEpm() {
   } else {
     Jmol.script(jmolApplet, "isosurface epmSurface off;");
     epmOn = false;
+    btn.classList.remove("active");
+  }
+
+  updateControlLabels();
+  updateViewerSubtitle();
+}
+
+function toggleVdw() {
+  if (!jmolReady || !jmolApplet) {
+    showError("jmolNotReady");
+    return;
+  }
+
+  vdwOn = !vdwOn;
+  const btn = document.getElementById("vdw-toggle");
+  if (!btn) return;
+
+  if (vdwOn) {
+    // superficie di van der Waals semi-trasparente
+    const script =
+      // crea un'isosuperficie vdW già semitrasparente
+      "isosurface vdwSurface vdw translucent 0.5; " +
+      // colore arancio/marrone chiaro (puoi cambiare a gusto)
+      "color isosurface vdwSurface [230,180,80];";
+
+    Jmol.script(jmolApplet, script);
+    btn.classList.add("active");
+  } else {
+    // spegni solo la superficie vdW
+    Jmol.script(jmolApplet, "isosurface vdwSurface off;");
     btn.classList.remove("active");
   }
 
@@ -859,6 +899,9 @@ document.addEventListener("DOMContentLoaded", () => {
   document
     .getElementById("epm-toggle")
     .addEventListener("click", toggleEpm);
+  document
+    .getElementById("vdw-toggle")
+    .addEventListener("click", toggleVdw);
 
   // Resonance AI form
   const aiForm = document.getElementById("ai-form");
